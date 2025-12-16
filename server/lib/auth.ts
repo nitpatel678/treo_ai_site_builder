@@ -24,16 +24,17 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
 
   advanced: {
-    cookies: {
-      sessionToken: {
-        name: "auth_session",
-        attributes: {
-          httpOnly: true,
-          secure: true,        // 🔥 REQUIRED for prod
-          sameSite: "none",    // 🔥 REQUIRED for cross-domain
-          path: "/",
-        },
+  cookies: {
+    session_token: {
+      name: "auth_session",
+      attributes: {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/",
       },
     },
   },
+},
+
 });
