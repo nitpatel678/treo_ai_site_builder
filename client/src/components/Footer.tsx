@@ -1,6 +1,6 @@
 // Footer.tsx
 import React, { useEffect, useState } from "react";
-import { GitBranch, Twitter, Mail, Globe } from "lucide-react";
+import { GitBranch } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
