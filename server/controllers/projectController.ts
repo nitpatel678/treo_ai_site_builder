@@ -53,7 +53,7 @@ export const makeRevision = async (req: Request, res: Response) => {
 
     // ✅ Enhance user prompt
     const promptEnhanceResponse = await openai.chat.completions.create({
-      model: "z-ai/glm-4.5-air:free",
+      model: "openai/gpt-oss-120b:free",
       messages: [
         {
           role: "system",
@@ -95,7 +95,7 @@ Return ONLY the enhanced request, nothing else. Keep it concise (1-2 sentences).
 
     // ✅ Generate updated website code
     const codeGenerationResponse = await openai.chat.completions.create({
-      model: "z-ai/glm-4.5-air:free",
+      model: "openai/gpt-oss-120b:free",
       messages: [
         {
           role: "system",
