@@ -28,6 +28,8 @@ export const getUserCredits = async (req: Request, res: Response) => {
 export const createUserProject = async (req: Request, res: Response) => {
   const userId = req.userId;
 
+  let projectIdToUpdate = "";
+
   try {
     const { initial_prompt } = req.body;
     if (!userId) {
@@ -55,6 +57,8 @@ export const createUserProject = async (req: Request, res: Response) => {
         userId,
       },
     });
+    
+    projectIdToUpdate = project.id;
 
     // Update user total creations
     await prisma.user.update({
@@ -206,7 +210,21 @@ You are an expert web developer. Create a complete, production-ready, single-pag
       data: { credits: { increment: 5 } },
     });
     console.log(error.code || error.message);
-    res.status(500).json({ message: error.message });
+    if (!res.headersSent) {
+      res.status(500).json({ message: error.message });
+    } else if (projectIdToUpdate) {
+      try {
+        await prisma.conversation.create({
+          data: {
+            role: "assistant",
+            content: `Error generating website: ${error.message || "Unknown error"}. Your credits have been refunded.`,
+            projectId: projectIdToUpdate,
+          },
+        });
+      } catch (e) {
+        console.error("Failed to write error message to conversation", e);
+      }
+    }
   }
 };
 
