@@ -253,7 +253,7 @@ const Sidebar = ({
             rows={4}
             placeholder="Describe what you want to modify…"
             className="
-              flex-1 p-3 rounded-xl resize-none text-sm 
+              w-full p-3 pr-12 rounded-xl resize-none text-sm 
               bg-white/5 border border-white/10 backdrop-blur-sm
               text-white placeholder-white/50
               outline-none focus:border-indigo-500 transition

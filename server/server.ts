@@ -11,8 +11,13 @@ const app = express();
 
 const port = 3000;
 
+const allowedOrigins = process.env.TRUSTED_ORIGINS?.split(',').map(o => o.trim().replace(/\/$/, '')) || [];
+if (!allowedOrigins.includes('https://treo-ai-site-builder.vercel.app')) {
+    allowedOrigins.push('https://treo-ai-site-builder.vercel.app');
+}
+
 const corsOptions = {
-    origin : process.env.TRUSTED_ORIGINS?.split(',') || [],
+    origin : allowedOrigins,
     credentials : true,
 }
 
