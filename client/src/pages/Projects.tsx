@@ -46,7 +46,11 @@ const Projects = () => {
     try{
       const {data} = await api.get(`/api/user/project/${projectId}`);
       setProject(data.project)
-      setIsGenerating(data.project.current_code?false : true)
+      
+      const lastMessage = data.project.conversation?.[data.project.conversation.length - 1];
+      const hasFailedMessage = lastMessage?.role === 'assistant' && lastMessage.content.startsWith('Error generating website');
+      
+      setIsGenerating(data.project.current_code ? false : (hasFailedMessage ? false : true))
       setLoading(false)
     } catch(error : any){
       toast.error(error?.response?.data?.message || error.message);
@@ -115,11 +119,13 @@ const Projects = () => {
   },[session?.user])
 
   useEffect(() => {
-    if (project && !project.current_code) {
+    const lastMessage = project?.conversation?.[project.conversation.length - 1];
+    const hasFailedMessage = lastMessage?.role === 'assistant' && lastMessage.content.startsWith('Error generating website');
+    
+    if (project && !project.current_code && !hasFailedMessage) {
       const intervalId = setInterval(fetchProject, 10000);
       return ()=> clearInterval(intervalId)
     }
-    
   }, [project]);
 
   if (loading) {

@@ -34,9 +34,11 @@ const Sidebar = ({
     try {
       const { data } = await api.get(`/api/user/project/${project.id}`);
       setProject(data.project);
+      return data.project;
     } catch (error: any) {
       toast.error(error?.response?.data?.message || error.message);
       console.log(error);
+      return null;
     }
   };
 
@@ -81,12 +83,13 @@ const Sidebar = ({
 
       // 🚀 Begin polling server every 3 seconds
       interval = setInterval(async () => {
-        await fetchProject();
+        const updatedProject = await fetchProject();
 
         // Stop polling once new version is created
         if (
-          project.current_version_index &&
-          project.current_version_index !== previousVersion
+          updatedProject &&
+          updatedProject.current_version_index &&
+          updatedProject.current_version_index !== previousVersion
         ) {
           clearInterval(interval);
           setIsGenerating(false);
@@ -102,6 +105,8 @@ const Sidebar = ({
       toast.success(data.message);
       setInput("");
     } catch (error: any) {
+      clearInterval(interval);
+      setIsGenerating(false);
       toast.error(error?.response?.data?.message || error.message);
       console.log(error);
     }
