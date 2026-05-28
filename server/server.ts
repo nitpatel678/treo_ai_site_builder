@@ -32,7 +32,9 @@ app.use(express.json({limit:'50mb'}))
 app.get('/', (req: Request, res: Response) => {
     res.send('Server is Live!');
 });
-
+app.get('/health', (req: Request, res: Response) => {
+    res.status(200).send('OK');
+});
 app.use('/api/user', userRouter);
 app.use('/api/project', projectRouter);
 
